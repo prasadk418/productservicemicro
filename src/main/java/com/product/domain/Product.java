@@ -21,6 +21,9 @@ private String productName;
 @Column
 private Integer prodcutStock;
 
+@Column
+private String description;
+
 
 public Integer getProductId() {
 	return productId;
