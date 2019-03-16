@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.product.domain.Product;
+import com.product.exceptions.ProductNotFoundException;
 import com.product.repository.ProductRepository;
+import static com.product.util.ProductUtil.isNotPresent;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -20,11 +22,17 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Optional<Product> getProduct(Integer productId) {
-		// TODO Auto-generated method stub
-		return repo.findById(productId);
+	public Product getProduct(Integer productId) {
+		
+		Optional<Product> product=repo.findById(productId);
+		if(isNotPresent(product))
+		{
+			throw new ProductNotFoundException(productId + "- Requested product Details not Found..!");
+		}
+		return product.get();
 	}
-
+	
+	
 	@Override
 	public Product saveProduct(Product product) {
 		 return repo.save(product);
@@ -34,7 +42,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public void deleteProduct(Integer productId) {
 		repo.deleteById(productId);
-		
+				
 	}
 
 	
