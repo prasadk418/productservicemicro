@@ -14,7 +14,7 @@ public class ProductUtil {
 	}
 
 	public static <T> boolean isNotPresent(Optional<T> optional){
-		return optional.isPresent();
+		return !optional.isPresent();
 	}
 
 

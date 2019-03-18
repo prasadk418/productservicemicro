@@ -37,14 +37,14 @@ public class ProductController {
 	}
 
 	@GetMapping("/{productid}")
-	public ResponseEntity<Product> getProductById(@PathVariable("productid") Integer productId) {		
-			return new ResponseEntity<Product>(productSrervice.getProduct(productId), HttpStatus.OK);		
+	public ResponseEntity<Product> getProductById(@PathVariable("productid") Integer productId) {
+		return new ResponseEntity<Product>(productSrervice.getProduct(productId), HttpStatus.OK);
 	}
 
 	@PostMapping("/")
 	public ResponseEntity<Product> createProduct(@Valid @RequestBody Product productDetails) {
 		Product product = productSrervice.saveProduct(productDetails);
-		return new ResponseEntity<Product>(product, HttpStatus.OK);
+		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{productid}")
@@ -60,33 +60,29 @@ public class ProductController {
 
 	@DeleteMapping("/{productid}")
 	public ResponseEntity<?> deleteProduct(@PathVariable("productid") Integer productId) {
-		Product product = productSrervice.getProduct(productId);		
-		productSrervice.deleteProduct(product.getProductId());				
+		Product product = productSrervice.getProduct(productId);
+		productSrervice.deleteProduct(product.getProductId());
 		return new ResponseEntity<>("Product Deleted successfully", HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/{productid}/reviews")
 	public ResponseEntity<?> addReview(@PathVariable("productid") Integer productId, @RequestBody Review review1) {
 
-		review1.setProductId(productId);		
-		Integer reviewID = productReviewService.saveProductReview(productId, review1);
-		return new ResponseEntity<>(reviewID, HttpStatus.CREATED);
+		review1.setProductId(productId);
+		Review review = productReviewService.saveProductReview(productId, review1);
+		return new ResponseEntity<>(review, HttpStatus.CREATED);
 
 	}
-
-	
 
 	@PutMapping(value = "/{productid}/reviews/{reviewid}")
 	public ResponseEntity<?> updateReview(@PathVariable("productid") Integer productId,
 			@PathVariable("reviewid") Integer reviewId, @RequestBody Review review1) {
-		
+
 		Integer reviewID = productReviewService.updateProductReview(productId, reviewId, review1);
-		
+
 		return new ResponseEntity<>(reviewID, HttpStatus.CREATED);
 
 	}
-
-	
 
 	@DeleteMapping(value = "/{productid}/reviews/{reviewid}")
 	public ResponseEntity<?> deleteReview(@PathVariable("productid") Integer productId,
@@ -96,5 +92,4 @@ public class ProductController {
 		return new ResponseEntity<>("Deleted Successfully..!", HttpStatus.OK);
 	}
 
-	
 }

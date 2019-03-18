@@ -38,18 +38,15 @@ public class ProductReviewService {
 	 * @return
 	 * @throws RestClientException
 	 */
-	public Integer saveProductReview(Integer productId, Review review1) throws RestClientException {
+	public Review saveProductReview(Integer productId, Review review1) throws RestClientException {
 
 		HttpEntity<Review> entity = new HttpEntity<Review>(review1);
 
-		ResponseEntity<Integer> response = restTemplate.exchange(
-				buildUrl(loadProperties) + "/" + productId + "/reviews", HttpMethod.POST, entity, Integer.class);
-		Integer reviewID = response.getBody();
-
-		if (reviewID == null)
-			throw new OperationFailed("Data not stored in database");
-
-		return reviewID;
+		ResponseEntity<Review> response = restTemplate.exchange(
+				buildUrl(loadProperties) + "/" + productId + "/reviews", HttpMethod.POST, entity, Review.class);
+		Review review = response.getBody();
+		
+		return review;
 	}
 
 	/**

@@ -20,11 +20,18 @@ private Integer productId;
 private String productName;
 @Column
 private Integer prodcutStock;
-
 @Column
 private String description;
 
+public Product(){}
 
+public Product(Integer productId, String productName, Integer prodcutStock, String description) {
+	super();
+	this.productId = productId;
+	this.productName = productName;
+	this.prodcutStock = prodcutStock;
+	this.description = description;
+}
 public Integer getProductId() {
 	return productId;
 }

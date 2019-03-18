@@ -2,13 +2,6 @@ package com.product.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 public class Review implements Serializable{
 	
 	private static final long serialVersionUID = 123456L;
@@ -21,7 +14,19 @@ public class Review implements Serializable{
 	private String description;
 	
 	private Integer rating;
+	
+	public Review(){
 		
+	}
+		
+	public Review(Integer reviewId, Integer productId, String description, Integer rating) {
+		super();
+		this.reviewId = reviewId;
+		this.productId = productId;
+		this.description = description;
+		this.rating = rating;
+	}
+
 	public Integer getProductId() {
 		return productId;
 	}
