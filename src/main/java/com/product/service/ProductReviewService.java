@@ -1,34 +1,27 @@
 package com.product.service;
 
-import static com.product.util.ProductUtil.buildUrl;
-import static com.product.util.ProductUtil.isNotPresent;
-
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import com.product.domain.Review;
 import com.product.exceptions.OperationFailed;
 import com.product.exceptions.ReviewNotFoundException;
-import com.product.util.LoadProperties;
-import com.product.util.ProductUtil;
+import com.product.feign.ReviewServiceFeignClient;
 
 @Service
 public class ProductReviewService {
-
-	@Autowired
-	private RestTemplate restTemplate;
-
-	@Autowired
-	private LoadProperties loadProperties;
-
 	
+	@Value("${product.review.reviewservicename}")
+	private String serviceName;
+	
+	@Autowired
+	private ReviewServiceFeignClient reviewClient;
+
+		
 	public ProductReviewService() {
 	}
 
@@ -38,14 +31,10 @@ public class ProductReviewService {
 	 * @return
 	 * @throws RestClientException
 	 */
-	public Review saveProductReview(Integer productId, Review review1) throws RestClientException {
-
-		HttpEntity<Review> entity = new HttpEntity<Review>(review1);
-
-		ResponseEntity<Review> response = restTemplate.exchange(
-				buildUrl(loadProperties) + "/" + productId + "/reviews", HttpMethod.POST, entity, Review.class);
-		Review review = response.getBody();
-		
+	public Review saveProductReview(Integer productId,Review review1) throws RestClientException {
+		System.out.println(productId+"---------service---------"+review1);
+		Review review=reviewClient.saveProductReview(productId, review1);
+		System.out.println("Review created : --------"+review.getReviewId());
 		return review;
 	}
 
@@ -60,19 +49,15 @@ public class ProductReviewService {
 	public Integer updateProductReview(Integer productId, Integer reviewId, Review review1) throws RestClientException {
 
 		
-		Optional<Review> review = getProductReviewById(productId, reviewId);
+		Review review = getProductReviewById(productId, reviewId);
 		
-		review1.setReviewId(review.get().getReviewId());
-
-		HttpEntity<Review> entity = new HttpEntity<Review>(review1);
-
-		ResponseEntity<Integer> response = restTemplate.exchange(
-				buildUrl(loadProperties) + "/" + productId + "/reviews", HttpMethod.PUT, entity, Integer.class);
-
-		if (response.getBody() == null)
+		review1.setReviewId(review.getReviewId());
+		
+		Integer updatedReviewId=reviewClient.updateReview(productId, reviewId, review1);
+		if (updatedReviewId == null)
 			throw new OperationFailed("Data not stored in database");
 
-		return response.getBody();
+		return updatedReviewId;
 	}
 	
 	/**
@@ -84,8 +69,8 @@ public class ProductReviewService {
 	 */
 	public void deleteProductReview(Integer productId, Integer reviewId)
 			throws RestClientException, ReviewNotFoundException {
-		Optional<Review> review = getProductReviewById(productId, reviewId);		
-		restTemplate.delete(ProductUtil.buildUrl(loadProperties) + "/" + productId + "/reviews/" + review.get().getReviewId());
+		getProductReviewById(productId, reviewId);		
+		reviewClient.deleteProductReview(productId, reviewId);
 		
 	}
 
@@ -96,14 +81,24 @@ public class ProductReviewService {
 	 * @return
 	 * @throws RestClientException
 	 */
-	@SuppressWarnings("unchecked")
-	public Optional<Review> getProductReviewById(Integer productId, Integer reviewId)
+	public Review getProductReviewById(Integer productId, Integer reviewId)
 			throws RestClientException, ReviewNotFoundException {
-		Optional<Review> review = restTemplate
-				.getForObject(buildUrl(loadProperties) + "/" + productId + "/reviews/" + reviewId, Optional.class);
-		if (isNotPresent(review)) {
+		Review review = reviewClient.getProductReviewById(productId, reviewId);				
+		if (review == null) {
 			throw new ReviewNotFoundException(reviewId + "- Requested review Details not Found..!");
 		}
 		return review;
+	}
+	
+	/**
+	 * @param productId
+	 * @param reviewId
+	 * @return
+	 * @throws RestClientException
+	 */
+	public List<Review> getProductReviews(Integer productId)
+			throws RestClientException, ReviewNotFoundException {
+		List<Review> reviews =reviewClient.getProductReviews(productId); 
+		return reviews;
 	}
 }

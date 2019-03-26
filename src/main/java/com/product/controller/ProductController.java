@@ -21,6 +21,7 @@ import com.product.domain.Review;
 import com.product.service.ProductReviewService;
 import com.product.service.ProductService;
 
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -30,10 +31,13 @@ public class ProductController {
 
 	@Autowired
 	private ProductReviewService productReviewService;
-
+	
+	
 	@GetMapping("/")
-	public ResponseEntity<List<Product>> getProduct() {
-		return new ResponseEntity<List<Product>>(productSrervice.getAllProducts(), HttpStatus.OK);
+	public ResponseEntity<List<Review>> getProduct() {
+		//List<ProductDTO> dtos=new ArrayList<ProductDTO>();
+		List<Review> reviewList=productReviewService.getProductReviews(1);
+		return new ResponseEntity<List<Review>>(reviewList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{productid}")
@@ -47,6 +51,7 @@ public class ProductController {
 		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 	}
 
+	
 	@PutMapping("/{productid}")
 	public ResponseEntity<Product> updateProduct(@PathVariable("productid") Integer productId,
 			@Valid @RequestBody Product productDetails) throws Exception {
@@ -64,10 +69,11 @@ public class ProductController {
 		productSrervice.deleteProduct(product.getProductId());
 		return new ResponseEntity<>("Product Deleted successfully", HttpStatus.OK);
 	}
+	
 
 	@PostMapping(value = "/{productid}/reviews")
 	public ResponseEntity<?> addReview(@PathVariable("productid") Integer productId, @RequestBody Review review1) {
-
+		System.out.println(productId+"---------controller---------"+review1);
 		review1.setProductId(productId);
 		Review review = productReviewService.saveProductReview(productId, review1);
 		return new ResponseEntity<>(review, HttpStatus.CREATED);
