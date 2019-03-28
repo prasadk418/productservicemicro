@@ -51,7 +51,7 @@ public class ProductServiceApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-	/*
+	
 	@Test
 	public void getProductDetails(){
 		
@@ -102,7 +102,7 @@ public class ProductServiceApplicationTests {
 		Assert.isTrue(response.getStatusCode().equals(HttpStatus.NOT_FOUND));
 				
 	}
-	*/
+	
 	@Test
 	public void createProductReview(){					
 		HttpEntity<Review> reviewEntity=new HttpEntity<Review>(review);
