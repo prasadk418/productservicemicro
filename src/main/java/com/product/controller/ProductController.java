@@ -34,10 +34,9 @@ public class ProductController {
 	
 	
 	@GetMapping("/")
-	public ResponseEntity<List<Review>> getProduct() {
-		//List<ProductDTO> dtos=new ArrayList<ProductDTO>();
-		List<Review> reviewList=productReviewService.getProductReviews(1);
-		return new ResponseEntity<List<Review>>(reviewList, HttpStatus.OK);
+	public ResponseEntity<List<Product>> getProducts() {
+		List<Product> productList=productSrervice.getAllProducts();
+		return new ResponseEntity<List<Product>>(productList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{productid}")

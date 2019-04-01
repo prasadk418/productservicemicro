@@ -3,7 +3,6 @@ package com.product.util;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.netflix.appinfo.InstanceInfo;
@@ -18,12 +17,8 @@ public class ProductUtil {
 	
 	
 	
-	public String buildUrl(String serviceName){
-		/*System.out.println(loadProperties.getProtocol() + "://"
-				+ loadProperties.getReviewservicename());
-		*/
-		InstanceInfo instance=client.getNextServerFromEureka(serviceName, false);
-		System.out.println(instance.getHomePageUrl());
+	public String buildUrl(String serviceName){		
+		InstanceInfo instance=client.getNextServerFromEureka(serviceName, false);		
 		return instance.getHomePageUrl() ;
 	}
 

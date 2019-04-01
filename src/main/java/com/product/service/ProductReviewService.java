@@ -31,10 +31,8 @@ public class ProductReviewService {
 	 * @return
 	 * @throws RestClientException
 	 */
-	public Review saveProductReview(Integer productId,Review review1) throws RestClientException {
-		System.out.println(productId+"---------service---------"+review1);
-		Review review=reviewClient.saveProductReview(productId, review1);
-		System.out.println("Review created : --------"+review.getReviewId());
+	public Review saveProductReview(Integer productId,Review review1) throws RestClientException {		
+		Review review=reviewClient.saveProductReview(productId, review1);		
 		return review;
 	}
 
