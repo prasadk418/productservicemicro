@@ -1,6 +1,8 @@
 package com.product.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table
-public class Product implements Serializable{
+public class Product implements Serializable{ //extends ResourceSupport 
 	
 private static final long serialVersionUID = 123456L;
 @Id	
