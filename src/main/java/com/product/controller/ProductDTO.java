@@ -1,33 +1,50 @@
 package com.product.controller;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.product.domain.Product;
 import com.product.domain.Review;
 
-public class ProductDTO {
+public class ProductDTO implements Serializable{
 
-	public ProductDTO() {
-		// TODO Auto-generated constructor stub
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Product product;	
+	private Integer reviewId;
+	private Integer rating;
+	
+		
+	public ProductDTO(Product product) {		
+		this.product = product;
+		/*this.reviewId = reviewId;
+		this.rating = rating;*/
+	}
+	
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	public Integer getReviewId() {
+		return reviewId;
+	}
+	public void setReviewId(Integer reviewId) {
+		this.reviewId = reviewId;
+	}
+	public Integer getRating() {
+		return rating;
+	}
+	public void setRating(Integer rating) {
+		this.rating = rating;
 	}
 	
 	
-	private Integer productId;
-	private List<Review> reviewList=new ArrayList<Review>();
-
-	public List<Review> getReviewList(){
-		return reviewList;
-	}
-
-	public Integer getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Integer productId) {
-		this.productId = productId;
-	}
 	
-	
-
 	
 }

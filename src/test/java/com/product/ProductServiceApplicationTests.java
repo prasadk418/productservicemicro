@@ -44,7 +44,7 @@ public class ProductServiceApplicationTests {
 	
 	@Before
 	public void init(){
-	product=new Product(10, "Desktop", 20, "HP Desktops");	
+	product=new Product(10, "Desktop", 20, "HP Desktops", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-_pQ2NB80iIGwbWDMcCCmP_2VCpizokD7g_d19Manievc02WNw");	
 	review=new Review(100,1000,"Good Product, working fine", 4);
 	}
 	
