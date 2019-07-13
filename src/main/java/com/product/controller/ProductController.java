@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.product.domain.Product;
 import com.product.domain.Review;
 import com.product.service.ProductReviewService;
@@ -24,6 +26,8 @@ import com.product.service.ProductService;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin(origins = {"http://localhost:4200"}, maxAge=48000, allowCredentials="false")
+//@CrossOrigin(origins = {"http://localhost:8585"}, maxAge = 4800, allowCredentials = "false")
 public class ProductController {
 
 	@Autowired
@@ -33,15 +37,15 @@ public class ProductController {
 	private ProductReviewService productReviewService;
 	
 	
-	@GetMapping("/")
-	public ResponseEntity<List<Product>> getProducts() {
-		List<Product> productList=productSrervice.getAllProducts();
+	@GetMapping(value="/")
+	public ResponseEntity<List<Product>> getProducts() throws JsonProcessingException {		
+		List<Product> productList=productSrervice.getAllProducts();						
 		return new ResponseEntity<List<Product>>(productList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{productid}")
 	public ResponseEntity<Product> getProductById(@PathVariable("productid") Integer productId) {
-		return new ResponseEntity<Product>(productSrervice.getProduct(productId), HttpStatus.OK);
+		return new ResponseEntity<Product>(productSrervice.getProduct(productId), HttpStatus.OK);		
 	}
 
 	@PostMapping("/")
@@ -94,6 +98,11 @@ public class ProductController {
 
 		productReviewService.deleteProductReview(productId, reviewId);
 		return new ResponseEntity<>("Deleted Successfully..!", HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/{productid}/reviews")
+	public List<Review> getProductReviews(@PathVariable("productid") Integer productId){
+		return productReviewService.getProductReviews(productId);		
 	}
 
 }
